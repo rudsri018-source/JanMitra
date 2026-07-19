@@ -102,6 +102,17 @@ function getMockTableData(tableName: string): any[] {
   }
 }
 
+// Reactive auth listeners for mock client
+let mockAuthCallback: ((event: string, session: any) => void) | null = null;
+
+function triggerMockAuthStateChange() {
+  if (mockAuthCallback) {
+    const mockUser = getMockUser();
+    const session = mockUser ? { user: mockUser, access_token: 'mock-token' } : null;
+    mockAuthCallback(mockUser ? 'SIGNED_IN' : 'SIGNED_OUT', session);
+  }
+}
+
 class MockSupabaseQuery {
   private tableName: string;
   private data: any[];
@@ -196,37 +207,47 @@ export const supabase = {
       });
     },
     onAuthStateChange: (callback: (event: string, session: any) => void) => {
+      mockAuthCallback = callback;
       const mockUser = getMockUser();
       const session = mockUser ? { user: mockUser, access_token: 'mock-token' } : null;
       setTimeout(() => callback('SIGNED_IN', session), 0);
       return {
         data: {
           subscription: {
-            unsubscribe: () => {}
+            unsubscribe: () => {
+              if (mockAuthCallback === callback) {
+                mockAuthCallback = null;
+              }
+            }
           }
         }
       };
     },
     signInWithPassword: ({ email }: { email: string }) => {
       const user = saveMockUser(email);
+      setTimeout(triggerMockAuthStateChange, 0);
       return Promise.resolve({ data: { user }, error: null });
     },
     signUp: ({ email, options }: any) => {
       const fullName = options?.data?.full_name || '';
       const user = saveMockUser(email, fullName);
+      setTimeout(triggerMockAuthStateChange, 0);
       return Promise.resolve({ data: { user }, error: null });
     },
     signInWithOAuth: () => {
       const user = saveMockUser('google.user@example.com', 'Google User');
+      setTimeout(triggerMockAuthStateChange, 0);
       return Promise.resolve({ data: { user }, error: null });
     },
     signInWithOtp: () => Promise.resolve({ data: {}, error: null }),
     verifyOtp: ({ phone }: any) => {
       const user = saveMockUser(phone + '@phone.com', 'Phone User');
+      setTimeout(triggerMockAuthStateChange, 0);
       return Promise.resolve({ data: { user }, error: null });
     },
     signOut: () => {
       clearMockUser();
+      setTimeout(triggerMockAuthStateChange, 0);
       return Promise.resolve({ error: null });
     }
   }
