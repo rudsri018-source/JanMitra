@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { usePolicy } from '../hooks/useData';
 import { useTranslation } from '../i18n/useTranslation';
 import { useRouter } from '../router/Router';
-import { SaveButton, ShareButton, PrintButton, LoadingSpinner, EmptyState } from '../components/ui';
+import { SaveButton, ShareButton, PrintButton, LoadingSpinner, EmptyState, formatDate } from '../components/ui';
 import { ArrowRight, CheckCircle2, Scale, HelpCircle, ExternalLink } from 'lucide-react';
 
 export function PolicyDetailPage({ slug }: { slug: string }) {
@@ -92,7 +92,7 @@ export function PolicyDetailPage({ slug }: { slug: string }) {
 
       {policy.last_verified_at && (
         <div className="text-xs text-charcoal-400 dark:text-charcoal-500 flex items-center gap-1">
-          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Last verified: {new Date(policy.last_verified_at).toLocaleDateString('en-IN')}
+          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Last verified: {formatDate(policy.last_verified_at)}
         </div>
       )}
     </div>

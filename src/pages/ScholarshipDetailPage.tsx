@@ -3,7 +3,7 @@ import { useScholarship } from '../hooks/useData';
 import { useTranslation } from '../i18n/useTranslation';
 import { useRouter } from '../router/Router';
 import { useRecentlyViewed } from '../hooks/useSaved';
-import { SaveButton, ShareButton, PrintButton, LoadingSpinner, EmptyState } from '../components/ui';
+import { SaveButton, ShareButton, PrintButton, LoadingSpinner, EmptyState, formatDate } from '../components/ui';
 import { CheckCircle2, FileText, Globe, Phone, Mail, Calendar, ArrowRight, Award, ExternalLink } from 'lucide-react';
 
 export function ScholarshipDetailPage({ slug }: { slug: string }) {
@@ -70,7 +70,7 @@ export function ScholarshipDetailPage({ slug }: { slug: string }) {
               <Calendar className="w-4 h-4 text-gold-500" />
               <p className="text-xs font-semibold text-charcoal-500 dark:text-charcoal-400">{t('deadline')}</p>
             </div>
-            <p className="text-sm text-charcoal-900 dark:text-white">{scholarship.deadline}</p>
+            <p className="text-sm text-charcoal-900 dark:text-white">{formatDate(scholarship.deadline)}</p>
           </div>
         )}
       </div>

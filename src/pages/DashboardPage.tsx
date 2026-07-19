@@ -5,7 +5,7 @@ import { useSchemes, useScholarships, useNotifications, useCategories } from '..
 import { useSavedItems, useRecentlyViewed } from '../hooks/useSaved';
 import { getRecommendedSchemes } from '../lib/eligibility';
 import { Link } from '../router/Router';
-import { SchemeCard } from '../components/ui';
+import { SchemeCard, formatDate } from '../components/ui';
 import {
   Sparkles, ListChecks, FileText, Award, Bell, TrendingUp, Clock,
   Bookmark, BarChart3, ChevronRight, ArrowRight, BookOpen, Scale, FileCheck,
@@ -61,29 +61,76 @@ export function DashboardPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 dark:from-emerald-800 dark:via-charcoal-900 dark:to-emerald-950 p-8 lg:p-10 text-white animate-slide-up">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold-400/20 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-emerald-300/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-teal-300/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '0.8s' }} />
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 animate-fade-in">
-            <Sparkles className="w-3.5 h-3.5 text-gold-300" />
-            <span className="text-xs font-medium text-emerald-50">{t('poweredBy')}</span>
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B1F3A] via-[#0D2E5C] to-[#138808] dark:from-[#07111F] dark:via-[#0F172A] dark:to-[#09351C] p-8 lg:p-10 text-white animate-slide-up shadow-xl shadow-emerald-950/10">
+        {/* Glowing floating decorative spheres */}
+        <div className="absolute top-[-80px] right-[-80px] w-96 h-96 bg-[#FF9933]/15 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-[-100px] left-[20%] w-96 h-96 bg-[#138808]/15 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-1/2 right-[35%] w-64 h-64 bg-[#60A5FA]/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '0.8s' }} />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          {/* Left panel text contents */}
+          <div className="lg:col-span-8 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 shadow-sm animate-fade-in">
+              <Sparkles className="w-3.5 h-3.5 text-[#FDBA74] animate-pulse" />
+              <span className="text-xs font-bold tracking-wide text-white/90">Powered by JanMitra AI</span>
+            </div>
+            
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl sm:text-2xl animate-bounce-soft">👋</span>
+                <p className="text-white/80 text-sm font-semibold tracking-wide uppercase">{greeting()},</p>
+              </div>
+              <h1 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl leading-tight mb-2 tracking-tight text-white drop-shadow-sm">
+                {profile?.full_name || (isGuest ? t('guest') : t('user'))}!
+              </h1>
+              <p className="text-white/95 text-xs sm:text-sm max-w-xl leading-relaxed font-medium">
+                {t('tagline')}. {eligibilityProfile ? 'Your profile is set — recommendations are personalized.' : 'Complete your profile for personalized scheme recommendations.'}
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap gap-3.5 pt-2">
+              <Link to="/assistant" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#FF9933] to-[#FDBA74] text-white px-6 py-3 text-xs sm:text-sm font-bold hover:brightness-110 transition-all hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-[#FF9933]/30">
+                <Sparkles className="w-4 h-4" /> {t('aiAssistant')}
+              </Link>
+              <Link to="/eligibility" className="inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white px-6 py-3 text-xs sm:text-sm font-bold transition-all hover:scale-105 active:scale-95 hover:shadow-md">
+                <ListChecks className="w-4 h-4" /> {t('checkEligibility')}
+              </Link>
+            </div>
           </div>
-          <p className="text-emerald-100 text-sm mb-1">{greeting()},</p>
-          <h1 className="font-display font-extrabold text-3xl lg:text-4xl mb-2 text-balance">
-            {profile?.full_name || (isGuest ? t('guest') : t('user'))}!
-          </h1>
-          <p className="text-emerald-100 max-w-lg mb-6 text-balance">
-            {t('tagline')}. {eligibilityProfile ? 'Your profile is set — recommendations are personalized.' : 'Complete your profile for personalized scheme recommendations.'}
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/assistant" className="inline-flex items-center gap-2 rounded-xl bg-white text-emerald-700 px-5 py-2.5 text-sm font-semibold hover:bg-emerald-50 transition-all active:scale-95 hover:shadow-lg hover:shadow-white/20">
-              <Sparkles className="w-4 h-4" /> {t('aiAssistant')}
-            </Link>
-            <Link to="/eligibility" className="inline-flex items-center gap-2 rounded-xl bg-white/20 backdrop-blur-xl border border-white/30 text-white px-5 py-2.5 text-sm font-semibold hover:bg-white/30 transition-all active:scale-95">
-              <ListChecks className="w-4 h-4" /> {t('checkEligibility')}
-            </Link>
+
+          {/* Right panel interactive chatbot graphic */}
+          <div className="lg:col-span-4 hidden lg:flex justify-center relative scale-95">
+            <div className="relative w-64 h-64 flex items-center justify-center">
+              {/* Outer rotating dash borders */}
+              <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#FDBA74]/35 animate-spin" style={{ animationDuration: '30s' }} />
+              <div className="absolute inset-3 rounded-full border border-dashed border-[#4ADE80]/30 animate-spin" style={{ animationDuration: '20s', animationDirection: 'reverse' }} />
+              
+              {/* Concentric aura */}
+              <div className="absolute inset-6 rounded-full bg-gradient-to-tr from-[#FF9933]/10 to-[#138808]/10 backdrop-blur-sm animate-pulse-soft" />
+
+              {/* Glowing core logo */}
+              <div className="w-40 h-40 rounded-full bg-[#0B1F3A] border-4 border-white/25 flex flex-col items-center justify-center shadow-2xl relative group">
+                <svg className="w-20 h-20 filter drop-shadow-md animate-pulse-soft" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* National swooshes */}
+                  <path d="M25 45 C 35 30, 65 30, 75 45" stroke="#FF9933" strokeWidth="6" strokeLinecap="round" />
+                  <path d="M30 52 C 40 40, 60 40, 70 52" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" />
+                  <path d="M35 59 C 42 50, 58 50, 65 59" stroke="#138808" strokeWidth="6" strokeLinecap="round" />
+                  <path d="M50 25 L53 35 L63 38 L53 41 L50 51 L47 41 L37 38 L47 35 Z" fill="#FDBA74" />
+                </svg>
+                <span className="text-[10px] uppercase tracking-widest text-[#FDBA74] font-black absolute bottom-4">JANMITRA</span>
+              </div>
+
+              {/* Orbiting Icons */}
+              <div className="absolute top-1 right-2 bg-gradient-to-tr from-amber-500 to-[#FF9933] p-2.5 rounded-2xl shadow-lg border border-white/20 animate-float">
+                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div className="absolute bottom-2 left-1 bg-gradient-to-tr from-emerald-500 to-[#138808] p-2.5 rounded-2xl shadow-lg border border-white/20 animate-float" style={{ animationDelay: '1.5s' }}>
+                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div className="absolute top-28 -right-6 bg-gradient-to-tr from-blue-500 to-indigo-600 p-2.5 rounded-2xl shadow-lg border border-white/20 animate-float" style={{ animationDelay: '0.8s' }}>
+                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -196,7 +243,7 @@ export function DashboardPage() {
                   </div>
                   <h3 className="font-semibold text-sm text-charcoal-900 dark:text-white mt-2 line-clamp-1">{n.title}</h3>
                   <p className="text-xs text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mt-1">{n.body}</p>
-                  <p className="text-xs text-charcoal-400 mt-2">{new Date(n.created_at).toLocaleDateString()}</p>
+                  <p className="text-xs text-charcoal-400 mt-2">{formatDate(n.created_at)}</p>
                 </div>
               </Link>
             ))}
