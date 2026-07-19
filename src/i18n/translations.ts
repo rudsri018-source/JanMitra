@@ -101,7 +101,7 @@ export type LangCode = (typeof languages)[number]['code'];
 
 // English (base) - complete
 const en = {
-  appName: 'JanSeva Bharat', tagline: 'Your AI guide to government schemes and services',
+  appName: 'JanMitra', tagline: 'Your AI guide to government schemes and services',
   signIn: 'Sign In', signUp: 'Sign Up', signOut: 'Sign Out', email: 'Email', password: 'Password',
   fullName: 'Full Name', continueAsGuest: 'Continue as Guest', google: 'Continue with Google',
   phone: 'Phone', phoneOtp: 'Phone OTP', sendOtp: 'Send OTP', verifyOtp: 'Verify OTP',
@@ -244,7 +244,7 @@ const en = {
 
 // Hindi - complete
 const hi = {
-  appName: 'जनसेवा भारत', tagline: 'सरकारी योजनाओं और सेवाओं के लिए आपका AI गाइड',
+  appName: 'जनमित्र', tagline: 'सरकारी योजनाओं और सेवाओं के लिए आपका AI गाइड',
   signIn: 'साइन इन', signUp: 'साइन अप', signOut: 'साइन आउट', email: 'ईमेल', password: 'पासवर्ड',
   fullName: 'पूरा नाम', continueAsGuest: 'अतिथि के रूप में जारी रखें', google: 'Google के साथ जारी रखें',
   phone: 'फ़ोन', phoneOtp: 'फ़ोन OTP', sendOtp: 'OTP भेजें', verifyOtp: 'OTP सत्यापित करें',

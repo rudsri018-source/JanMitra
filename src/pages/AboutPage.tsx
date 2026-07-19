@@ -8,7 +8,7 @@ export function AboutPage() {
     <div className="animate-fade-in space-y-8 max-w-4xl mx-auto">
       {/* Title */}
       <div className="border-b border-charcoal-200/50 dark:border-charcoal-800/50 pb-4 text-center">
-        <h1 className="font-display font-extrabold text-3xl text-charcoal-900 dark:text-white mb-2">About JanSeva Bharat</h1>
+        <h1 className="font-display font-extrabold text-3xl text-charcoal-900 dark:text-white mb-2">About JanMitra</h1>
         <p className="text-sm text-charcoal-500 dark:text-charcoal-400">Simplifying access to welfare schemes and citizen services across India.</p>
       </div>
 
@@ -19,7 +19,7 @@ export function AboutPage() {
         </div>
         <h2 className="font-display font-bold text-lg text-charcoal-900 dark:text-white">Our Mission</h2>
         <p className="text-sm text-charcoal-600 dark:text-[#CBD5E1] leading-relaxed">
-          JanSeva Bharat is a modern AI-powered platform designed to close the information gap between the government and the citizens of India. Finding welfare schemes, scholarships, and public services can often feel overwhelming due to complicated terminology and fragmented websites. Our goal is to consolidate this information into one central, easy-to-use search engine equipped with natural language processing.
+          JanMitra is a modern AI-powered platform designed to close the information gap between the government and the citizens of India. Finding welfare schemes, scholarships, and public services can often feel overwhelming due to complicated terminology and fragmented websites. Our goal is to consolidate this information into one central, easy-to-use search engine equipped with natural language processing.
         </p>
       </div>
 
@@ -31,7 +31,7 @@ export function AboutPage() {
           </div>
           <h3 className="font-display font-bold text-sm text-charcoal-900 dark:text-white">Secure and Private</h3>
           <p className="text-xs text-charcoal-500 dark:text-[#CBD5E1] leading-relaxed">
-            We prioritize citizen privacy. JanSeva Bharat does not save or prompt you for private numbers, passwords, OTPs, or financial records. All documents are only submitted on verified official websites.
+            We prioritize citizen privacy. JanMitra does not save or prompt you for private numbers, passwords, OTPs, or financial records. All documents are only submitted on verified official websites.
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export function AboutPage() {
       <div className="glass-card p-6 border-l-4 border-red-500 bg-red-500/5">
         <h3 className="font-display font-bold text-sm text-charcoal-900 dark:text-white mb-2">Important Security Disclaimer</h3>
         <p className="text-xs text-charcoal-600 dark:text-[#CBD5E1] leading-relaxed mb-4">
-          JanSeva Bharat is NOT affiliated, associated, authorized, endorsed by, or in any way officially connected with the Government of India or any state administration. The official government portals can be accessed at:
+          JanMitra is NOT affiliated, associated, authorized, endorsed by, or in any way officially connected with the Government of India or any state administration. The official government portals can be accessed at:
         </p>
         <div className="flex flex-wrap gap-3">
           <a href="https://india.gov.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-[#FF9933] hover:underline">
@@ -69,7 +69,7 @@ export function AboutPage() {
           If you have questions about the platform or noticed an out-of-date scheme reference, please contact our support team.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-xs font-semibold text-charcoal-600 dark:text-[#CBD5E1]">
-          <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-[#FF9933]" /> support@jansevabharat.gov.in (Mock)</span>
+          <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-[#FF9933]" /> support@janmitra.gov.in (Mock)</span>
           <span className="flex items-center gap-1.5"><Phone className="w-4 h-4 text-[#138808]" /> Toll-free: 1800-XXX-XXXX (Mock)</span>
         </div>
       </div>

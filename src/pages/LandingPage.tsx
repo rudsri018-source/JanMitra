@@ -8,6 +8,7 @@ import {
   TrendingUp, Lock, Search, ChevronRight, Star, HelpCircle,
 } from 'lucide-react';
 import { MOCK_SCHEMES, MOCK_CATEGORIES, MOCK_STATES, MOCK_SERVICES } from '../lib/mockData';
+import { JanMitraLogo } from '../components/AppShell';
 
 export function LandingPage() {
   const { t } = useTranslation();
@@ -51,12 +52,12 @@ export function LandingPage() {
       <header className="sticky top-1.5 z-40 bg-white/95 dark:bg-[#0F172A]/95 border-b border-charcoal-200/50 dark:border-charcoal-800/50 shadow-sm backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF9933] to-[#138808] flex items-center justify-center shadow-md">
-              <Sparkles className="w-4 h-4 text-white" />
+            <div className="flex-shrink-0 scale-90">
+              <JanMitraLogo />
             </div>
             <div>
               <h1 className="font-display font-extrabold text-sm lg:text-base text-charcoal-900 dark:text-white leading-tight">
-                JanSeva Bharat
+                JanMitra
               </h1>
               <p className="text-[10px] text-charcoal-500 dark:text-charcoal-300 font-medium">
                 {t('tagline')}
@@ -286,10 +287,10 @@ export function LandingPage() {
           </div>
         </section>
 
-        {/* How JanSeva Bharat Works */}
+        {/* How JanMitra Works */}
         <section className="py-12 bg-white dark:bg-[#0F172A] border border-charcoal-200 dark:border-charcoal-800 rounded-3xl p-8">
           <h2 className="font-display font-extrabold text-xl text-charcoal-900 dark:text-white mb-6 text-center">
-            How JanSeva Bharat Works
+            How JanMitra Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center space-y-3">
@@ -346,7 +347,7 @@ export function LandingPage() {
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-semibold text-xs text-charcoal-900 dark:text-white">JanSeva AI Assistant</p>
+                <p className="font-semibold text-xs text-charcoal-900 dark:text-white">JanMitra AI Assistant</p>
                 <p className="text-[10px] text-emerald-600">Online & Verified</p>
               </div>
             </div>
@@ -372,7 +373,7 @@ export function LandingPage() {
             <div>
               <h3 className="font-display font-bold text-sm text-charcoal-900 dark:text-white mb-1">Safety & Privacy Notice</h3>
               <p className="text-xs text-charcoal-600 dark:text-[#CBD5E1] leading-relaxed">
-                Never share sensitive documents (such as physical copies of your Aadhaar card, PAN card, or bank credentials) on unofficial channels. JanSeva Bharat will never ask you for passwords, bank details, or OTPs. Always submit documents only on official `.gov.in` domain portals.
+                Never share sensitive documents (such as physical copies of your Aadhaar card, PAN card, or bank credentials) on unofficial channels. JanMitra will never ask you for passwords, bank details, or OTPs. Always submit documents only on official `.gov.in` domain portals.
               </p>
             </div>
           </div>
@@ -381,7 +382,7 @@ export function LandingPage() {
         {/* Disclaimer */}
         <section className="text-center max-w-3xl mx-auto text-[10px] sm:text-xs text-charcoal-400">
           <p className="leading-relaxed">
-            <strong>Disclaimer:</strong> JanSeva Bharat is an independent, non-official information aggregation platform. All information displayed here is collected from official department websites (such as myscheme.gov.in and india.gov.in) and other public information listings. We are not associated with any government department, ministry, or authority.
+            <strong>Disclaimer:</strong> JanMitra is an independent, non-official information aggregation platform. All information displayed here is collected from official department websites (such as myscheme.gov.in and india.gov.in) and other public information listings. We are not associated with any government department, ministry, or authority.
           </p>
         </section>
 

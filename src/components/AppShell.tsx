@@ -20,6 +20,20 @@ const HEADER_NAV_ITEMS = [
   { to: '/about', label: 'About', toOverride: '/about', icon: BookOpen },
 ];
 
+export function JanMitraLogo() {
+  return (
+    <svg className="w-10 h-10 filter drop-shadow-sm" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="22" fill="#0B1F3A" />
+      {/* Dynamic saffron-white-green tricolor swooshes representing digital connection */}
+      <path d="M25 45 C 35 30, 65 30, 75 45" stroke="#FF9933" strokeWidth="6" strokeLinecap="round" />
+      <path d="M30 52 C 40 40, 60 40, 70 52" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" />
+      <path d="M35 59 C 42 50, 58 50, 65 59" stroke="#138808" strokeWidth="6" strokeLinecap="round" />
+      {/* Central yellow core star / sparkle */}
+      <path d="M50 25 L53 35 L63 38 L53 41 L50 51 L47 41 L37 38 L47 35 Z" fill="#FDBA74" />
+    </svg>
+  );
+}
+
 export function AppShell({ children, activePath }: { children: React.ReactNode; activePath: string }) {
   const { t } = useTranslation();
   const { profile, isGuest, signOut } = useAuth();
@@ -48,17 +62,17 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
           {/* Logo & Tagline */}
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden btn-ghost p-1.5 -ml-2 mr-1">
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 text-charcoal-800 dark:text-white" />
             </button>
             <Link to="/dashboard" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF9933] to-[#138808] flex items-center justify-center shadow-md">
-                <Sparkles className="w-5 h-5 text-white animate-pulse-soft" />
+              <div className="flex-shrink-0">
+                <JanMitraLogo />
               </div>
               <div>
-                <h1 className="font-display font-extrabold text-base lg:text-lg text-charcoal-900 dark:text-white leading-tight">
-                  JanSeva Bharat
+                <h1 className="font-display font-extrabold text-base lg:text-lg text-charcoal-900 dark:text-white leading-tight tracking-tight">
+                  JanMitra
                 </h1>
-                <p className="text-[10px] lg:text-xs text-charcoal-500 dark:text-[#CBD5E1] truncate font-medium">
+                <p className="text-[10px] lg:text-xs text-charcoal-600 dark:text-[#CBD5E1] truncate font-medium">
                   {t('tagline')}
                 </p>
               </div>
@@ -73,8 +87,8 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
                 to={item.to}
                 className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all ${
                   isActive(item.to)
-                    ? 'bg-[#0B1F3A] text-white dark:bg-[#FDBA74] dark:text-[#07111F]'
-                    : 'text-charcoal-600 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'
+                    ? 'bg-[#0B1F3A] text-white dark:bg-[#FDBA74] dark:text-[#07111F] shadow-sm'
+                    : 'text-charcoal-700 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'
                 }`}
               >
                 {item.label ? item.label : t(item.labelKey!)}
@@ -88,7 +102,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             <div className="relative">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="btn-ghost p-2 flex items-center gap-1 text-charcoal-600 dark:text-[#CBD5E1]"
+                className="btn-ghost p-2 flex items-center gap-1 text-charcoal-700 dark:text-[#CBD5E1] font-semibold"
                 aria-label="Language Selector"
               >
                 <Globe className="w-4 h-4" />
@@ -105,7 +119,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
                       <button
                         key={l.code}
                         onClick={() => { setLang(l.code); setLangMenuOpen(false); }}
-                        className={`flex items-center justify-between px-3 py-2 w-full rounded-xl text-xs transition-all ${lang === l.code ? 'bg-[#FF9933]/15 text-[#FF9933] font-bold' : 'text-charcoal-600 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'}`}
+                        className={`flex items-center justify-between px-3 py-2 w-full rounded-xl text-xs transition-all ${lang === l.code ? 'bg-[#FF9933]/15 text-[#FF9933] font-bold' : 'text-charcoal-700 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'}`}
                       >
                         <span>{l.nativeName}</span>
                         <span className="text-[10px] opacity-75">{l.name}</span>
@@ -119,14 +133,14 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="btn-ghost p-2 text-charcoal-600 dark:text-[#CBD5E1]"
+              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1]"
               aria-label="Toggle Theme"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-[#FDBA74]" /> : <Moon className="w-4 h-4" />}
             </button>
 
             {/* Notifications */}
-            <Link to="/notifications" className="btn-ghost p-2 relative text-charcoal-600 dark:text-[#CBD5E1]">
+            <Link to="/notifications" className="btn-ghost p-2 relative text-charcoal-700 dark:text-[#CBD5E1]">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF9933] rounded-full" />
             </Link>
@@ -134,7 +148,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             {/* Accessibility Settings Toggle */}
             <button
               onClick={() => setSettingsOpen(!settingsOpen)}
-              className="btn-ghost p-2 text-charcoal-600 dark:text-[#CBD5E1]"
+              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1]"
               aria-label="Accessibility Settings"
             >
               <Accessibility className="w-4 h-4" />
@@ -206,7 +220,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
                 <span className={largeFonts ? "text-[#138808]" : "text-charcoal-400"}>{largeFonts ? "ON" : "OFF"}</span>
               </button>
             </div>
-            <button onClick={() => setSettingsOpen(false)} className="btn-primary w-full mt-4 text-xs">Done</button>
+            <button onClick={() => setSettingsOpen(false)} className="btn-primary w-full mt-4 text-xs font-semibold">Done</button>
           </div>
         </div>
       )}
@@ -219,8 +233,8 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             {/* Header in mobile drawer */}
             <div className="flex items-center justify-between p-5 border-b border-charcoal-200/50 dark:border-charcoal-800/50">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-[#FF9933]" />
-                <span className="font-display font-extrabold text-sm text-charcoal-900 dark:text-white">JanSeva Bharat</span>
+                <JanMitraLogo />
+                <span className="font-display font-extrabold text-sm text-charcoal-900 dark:text-white">JanMitra</span>
               </div>
               <button onClick={() => setSidebarOpen(false)} className="btn-ghost p-1.5"><X className="w-5 h-5" /></button>
             </div>
@@ -235,7 +249,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                     isActive(item.to)
                       ? 'bg-[#0B1F3A] text-white dark:bg-[#FDBA74] dark:text-[#07111F]'
-                      : 'text-charcoal-600 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'
+                      : 'text-charcoal-700 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
@@ -255,10 +269,10 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
 
       {/* Guest Notice Banner */}
       {isGuest && (
-        <div className="bg-[#FF9933]/10 border-b border-[#FF9933]/20 px-4 py-2 text-center z-10">
-          <p className="text-xs lg:text-sm text-charcoal-800 dark:text-[#FDBA74] font-medium">
+        <div className="bg-[#FF9933]/15 border-b border-[#FF9933]/25 px-4 py-2.5 text-center z-10 animate-fade-in shadow-sm">
+          <p className="text-xs lg:text-sm text-charcoal-800 dark:text-[#FDBA74] font-semibold tracking-wide">
             {t('guestNotice')}{' '}
-            <Link to="/" className="font-bold underline text-[#0B1F3A] dark:text-white ml-1">{t('signIn')}</Link>
+            <Link to="/" className="font-bold underline text-[#0B1F3A] dark:text-white hover:text-[#FF9933] ml-1">{t('signIn')}</Link>
           </p>
         </div>
       )}
@@ -269,13 +283,13 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-charcoal-200/50 dark:border-charcoal-800/50 px-4 lg:px-8 py-8 text-center text-xs text-charcoal-500 dark:text-[#CBD5E1]">
-        <div className="h-1 w-24 flex gap-1 mx-auto mb-4">
+      <footer className="border-t border-charcoal-200/50 dark:border-charcoal-800/50 px-4 lg:px-8 py-8 text-center text-xs text-charcoal-600 dark:text-[#CBD5E1]">
+        <div className="h-1.5 w-24 flex gap-1 mx-auto mb-4">
           <div className="flex-1 bg-[#FF9933]"></div>
           <div className="flex-1 bg-charcoal-300"></div>
           <div className="flex-1 bg-[#138808]"></div>
         </div>
-        <p>&copy; {new Date().getFullYear()} JanSeva Bharat. {t('poweredBy')}.</p>
+        <p className="font-semibold">&copy; {new Date().getFullYear()} JanMitra. {t('poweredBy')}.</p>
       </footer>
     </div>
   );
