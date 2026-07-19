@@ -23,6 +23,10 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SearchPage } from './pages/SearchPage';
 import { AdminPage } from './pages/AdminPage';
+import { StatesPage } from './pages/StatesPage';
+import { StateDetailPage } from './pages/StateDetailPage';
+import { CentralSchemesPage } from './pages/CentralSchemesPage';
+import { AboutPage } from './pages/AboutPage';
 import { isSupabaseConfigured } from './lib/supabase';
 
 function AppContent() {
@@ -105,6 +109,18 @@ function AppContent() {
   } else if (cleanPath === '/notifications') {
     page = <NotificationsPage />;
     activePath = '/notifications';
+  } else if (cleanPath === '/states') {
+    page = <StatesPage />;
+    activePath = '/states';
+  } else if (segments[0] === 'states' && segments[1]) {
+    page = <StateDetailPage slug={segments[1]} />;
+    activePath = '/states';
+  } else if (cleanPath === '/central-schemes') {
+    page = <CentralSchemesPage />;
+    activePath = '/schemes';
+  } else if (cleanPath === '/about') {
+    page = <AboutPage />;
+    activePath = '/about';
   } else if (cleanPath === '/profile') {
     page = <ProfilePage />;
     activePath = '/profile';

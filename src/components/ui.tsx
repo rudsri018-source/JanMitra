@@ -112,78 +112,84 @@ interface SchemeCardProps {
   closeDate?: string | null;
   status?: string;
   lastVerifiedAt?: string | null;
+  layoutMode?: 'grid' | 'list';
 }
 
-export function SchemeCard({ title, slug, description, level, state, benefits, trending, tags, score, reasons, compact, requiredDocuments, officialWebsite, openDate, closeDate, status, lastVerifiedAt }: SchemeCardProps) {
+export function SchemeCard({ title, slug, description, level, state, benefits, trending, tags, score, reasons, compact, requiredDocuments, officialWebsite, openDate, closeDate, status, lastVerifiedAt, layoutMode = 'grid' }: SchemeCardProps) {
+  const isList = layoutMode === 'list';
   return (
-    <Link to={`/schemes/${slug}`} className="block group">
-      <div className="glass-card h-full flex flex-col">
-        <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className={level === 'central' ? 'badge-emerald' : 'badge-gold'}>
-              {level === 'central' ? 'Central' : state || 'State'}
-            </span>
-            {trending && <span className="badge-gold">Trending</span>}
-            {getStatusBadge(openDate, closeDate, status)}
-          </div>
-          <div className="flex items-center gap-1">
-            {lastVerifiedAt && (
-              <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
-                <BadgeCheck className="w-3 h-3" /> Verified
+    <Link to={`/schemes/${slug}`} className="block group w-full">
+      <div className={`glass-card h-full flex ${isList ? 'flex-col sm:flex-row sm:items-center justify-between gap-4 p-5' : 'flex-col'}`}>
+        <div className={`flex-1 ${isList ? 'min-w-0' : ''}`}>
+          <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className={level === 'central' ? 'badge-emerald' : 'badge-gold'}>
+                {level === 'central' ? 'Central' : state || 'State'}
               </span>
-            )}
-            {score !== undefined && (
-              <span className={`badge ${score >= 75 ? 'badge-emerald' : score >= 50 ? 'badge-gold' : 'badge-charcoal'}`}>
-                {score}% match
-              </span>
-            )}
+              {trending && <span className="badge-gold">Trending</span>}
+              {getStatusBadge(openDate, closeDate, status)}
+            </div>
+            <div className="flex items-center gap-1">
+              {lastVerifiedAt && (
+                <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
+                  <BadgeCheck className="w-3 h-3" /> Verified
+                </span>
+              )}
+              {score !== undefined && (
+                <span className={`badge ${score >= 75 ? 'badge-emerald' : score >= 50 ? 'badge-gold' : 'badge-charcoal'}`}>
+                  {score}% match
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
-          {title}
-        </h3>
-        {!compact && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mb-3">{description}</p>}
-        {benefits && (
-          <p className="text-sm text-charcoal-600 dark:text-charcoal-300 line-clamp-2 mb-3">
-            <span className="font-semibold">Benefits:</span> {benefits}
-          </p>
-        )}
-        {reasons && reasons.length > 0 && (
-          <ul className="text-xs text-charcoal-500 dark:text-charcoal-400 space-y-0.5 mb-3">
-            {reasons.slice(0, 2).map((r, i) => (
-              <li key={i} className="flex items-start gap-1">
-                <span className="text-emerald-500 mt-0.5">•</span>
-                <span className="line-clamp-1">{r}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {requiredDocuments && requiredDocuments.length > 0 && !compact && (
-          <div className="mb-3">
-            <p className="text-xs font-medium text-charcoal-600 dark:text-charcoal-300 mb-1 flex items-center gap-1">
-              <FileText className="w-3 h-3" /> Documents
+          <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
+            {title}
+          </h3>
+          {!compact && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mb-3">{description}</p>}
+          {benefits && (
+            <p className="text-sm text-charcoal-600 dark:text-charcoal-300 line-clamp-2 mb-3">
+              <span className="font-semibold">Benefits:</span> {benefits}
             </p>
-            <div className="flex flex-wrap gap-1">
-              {requiredDocuments.slice(0, 3).map((doc, i) => (
-                <span key={i} className="text-[10px] bg-charcoal-100 dark:bg-charcoal-800 rounded px-1.5 py-0.5 text-charcoal-600 dark:text-charcoal-300 line-clamp-1">{doc}</span>
+          )}
+          {reasons && reasons.length > 0 && (
+            <ul className="text-xs text-charcoal-500 dark:text-charcoal-400 space-y-0.5 mb-3">
+              {reasons.slice(0, 2).map((r, i) => (
+                <li key={i} className="flex items-start gap-1">
+                  <span className="text-emerald-500 mt-0.5">•</span>
+                  <span className="line-clamp-1">{r}</span>
+                </li>
               ))}
-              {requiredDocuments.length > 3 && <span className="text-[10px] text-charcoal-400">+{requiredDocuments.length - 3} more</span>}
+            </ul>
+          )}
+        </div>
+        
+        <div className={`flex flex-col gap-3 justify-end items-end ${isList ? 'sm:border-l sm:border-charcoal-200 dark:sm:border-charcoal-800 sm:pl-4 flex-shrink-0' : 'mt-auto pt-2'}`}>
+          {requiredDocuments && requiredDocuments.length > 0 && !compact && (
+            <div className={`${isList ? 'text-right hidden sm:block' : 'mb-3'}`}>
+              <p className="text-xs font-medium text-charcoal-600 dark:text-charcoal-300 mb-1 flex items-center gap-1 justify-end">
+                <FileText className="w-3 h-3" /> Documents
+              </p>
+              <div className="flex flex-wrap gap-1 justify-end">
+                {requiredDocuments.slice(0, 2).map((doc, i) => (
+                  <span key={i} className="text-[10px] bg-charcoal-100 dark:bg-charcoal-800 rounded px-1.5 py-0.5 text-charcoal-600 dark:text-charcoal-300 line-clamp-1">{doc}</span>
+                ))}
+              </div>
             </div>
+          )}
+          <div className="flex items-center gap-2 w-full justify-between">
+            {tags && tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {tags.slice(0, 2).map((tag) => (
+                  <span key={tag} className="badge-charcoal">{tag}</span>
+                ))}
+              </div>
+            )}
+            {officialWebsite && (
+              <span className="flex items-center gap-0.5 text-xs text-emerald-600 dark:text-emerald-400 ml-auto">
+                <ExternalLink className="w-3 h-3" /> Apply
+              </span>
+            )}
           </div>
-        )}
-        <div className="flex items-center justify-between gap-2 mt-auto pt-2">
-          {tags && tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {tags.slice(0, 2).map((tag) => (
-                <span key={tag} className="badge-charcoal">{tag}</span>
-              ))}
-            </div>
-          )}
-          {officialWebsite && (
-            <span className="flex items-center gap-0.5 text-xs text-emerald-600 dark:text-emerald-400 ml-auto">
-              <ExternalLink className="w-3 h-3" /> Apply
-            </span>
-          )}
         </div>
       </div>
     </Link>
