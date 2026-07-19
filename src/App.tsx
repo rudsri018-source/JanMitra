@@ -28,6 +28,10 @@ function AppContent() {
   const { loading, user, isGuest } = useAuth();
   const { path } = useRouter();
 
+  // Parse route
+  const cleanPath = path.split('?')[0];
+  const segments = cleanPath.split('/').filter(Boolean);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-charcoal-50 dark:bg-charcoal-950">
@@ -48,10 +52,6 @@ function AppContent() {
     if (cleanPath === '/auth') return <AuthPage />;
     return <LandingPage />;
   }
-
-  // Parse route
-  const cleanPath = path.split('?')[0];
-  const segments = cleanPath.split('/').filter(Boolean);
 
   let page: React.ReactNode;
   let activePath = '/dashboard';

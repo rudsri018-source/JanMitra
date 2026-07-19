@@ -93,22 +93,21 @@ export async function queryRagEndpoint(
   history?: HistoryEntry[],
 ): Promise<{ results: RagResult[]; response: string; intent: string; geminiUsed: boolean; geminiError: string | null }> {
   try {
-    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assistant`;
+    const apiUrl = `/api/chat`;
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query, profile, limit: 6, history }),
     });
-    if (!response.ok) throw new Error(`RAG request failed (${response.status})`);
+    if (!response.ok) throw new Error(`Chat request failed (${response.status})`);
     const data = await response.json();
     return {
       results: data.results || [],
       response: data.response || '',
       intent: data.intent || 'general',
-      geminiUsed: !!data.geminiUsed,
+      geminiUsed: data.geminiUsed !== undefined ? !!data.geminiUsed : true,
       geminiError: data.geminiError || null,
     };
   } catch (err) {

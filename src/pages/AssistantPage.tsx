@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSchemes } from '../hooks/useData';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../i18n/useTranslation';
-import { generateResponse, parseFollowUpAnswer, queryRagEndpoint, type ChatMessage, type HistoryEntry } from '../lib/ai';
+import { generateResponse, parseFollowUpAnswer, queryRagEndpoint, type ChatMessage, type HistoryEntry, type RagResult } from '../lib/ai';
 import type { EligibilityProfile } from '../types';
 import { Sparkles, Send, Mic, Bot, User as UserIcon, ArrowRight, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Link } from '../router/Router';
@@ -11,17 +11,21 @@ export function AssistantPage() {
   const { t } = useTranslation();
   const { schemes } = useSchemes();
   const { profile } = useAuth();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: 'assistant',
-      content: "Namaste! I'm JanMitra, your AI Government Assistant powered by Gemini. I can help you with government schemes, scholarships, citizen services, and policies.\n\nAsk me anything — I understand English, Hindi, and Hinglish!",
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [partialProfile, setPartialProfile] = useState<Partial<EligibilityProfile>>({});
   const [collectedProfile, setCollectedProfile] = useState<EligibilityProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: "Namaste! I'm JanMitra, your AI Government Assistant powered by Gemini. I can help you with government schemes, scholarships, citizen services, and policies.\n\nAsk me anything — I understand English, Hindi, and Hinglish!",
+      },
+    ]);
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -58,7 +62,7 @@ export function AssistantPage() {
     let updatedProfile = { ...partialProfile };
 
     const lastMsg = messages[messages.length - 1];
-    if (lastMsg.followUps && lastMsg.followUps.length > 0) {
+    if (lastMsg && lastMsg.followUps && lastMsg.followUps.length > 0) {
       const key = lastMsg.followUps[0];
       const parsed = parseFollowUpAnswer(key, text);
       updatedProfile = { ...updatedProfile, ...parsed };
@@ -75,7 +79,7 @@ export function AssistantPage() {
     if (isComplete) setCollectedProfile(updatedProfile as EligibilityProfile);
 
     // Query RAG endpoint with conversation history
-    let ragResults;
+    let ragResults: RagResult[] = [];
     let ragResponse = '';
     let geminiUsed = false;
     let geminiError: string | null = null;
