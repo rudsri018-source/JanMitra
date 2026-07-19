@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { MOCK_SCHEMES, MOCK_CATEGORIES, MOCK_STATES, MOCK_SERVICES } from '../lib/mockData';
 import { JanMitraLogo } from '../components/AppShell';
+import { SchemeCategoryIllustration } from '../components/ui';
 
 export function LandingPage() {
   const { t } = useTranslation();
@@ -188,9 +189,9 @@ export function LandingPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((c) => (
-              <Link key={c.id} to={`/schemes?category=${c.id}`} className="glass-card p-4 text-center block group hover:border-[#138808]">
-                <div className="w-10 h-10 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 flex items-center justify-center mx-auto mb-3 text-[#138808] group-hover:rotate-6 transition-transform">
-                  <Star className="w-5 h-5" />
+              <Link key={c.id} to={`/schemes?category=${c.slug}`} className="glass-card p-4 text-center block group hover:border-[#FF9933] hover-lift transition-all">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform shadow-sm">
+                  <SchemeCategoryIllustration category={c.slug} size="small" />
                 </div>
                 <p className="text-xs font-bold text-charcoal-900 dark:text-white leading-tight">{c.name}</p>
               </Link>

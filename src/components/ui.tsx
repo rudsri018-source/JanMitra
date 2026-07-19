@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Bookmark, BookmarkCheck, Share2, Printer, Download, BadgeCheck, Building2, FileText, Clock, ExternalLink, CheckCircle2 } from 'lucide-react';
+import { Bookmark, BookmarkCheck, Share2, Printer, Download, BadgeCheck, Building2, FileText, Clock, ExternalLink, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useSavedItems } from '../hooks/useSaved';
 import { useAuth } from '../context/AuthContext';
 import { Link } from '../router/Router';
+import { MOCK_SCHEMES, MOCK_CATEGORIES } from '../lib/mockData';
 
 interface SaveButtonProps {
   itemType: string;
@@ -19,11 +20,11 @@ export function SaveButton({ itemType, itemId, itemTitle }: SaveButtonProps) {
 
   return (
     <button
-      onClick={() => toggleSave(itemType, itemId, itemTitle)}
-      className={`btn-ghost ${saved ? 'text-emerald-600 dark:text-emerald-400' : ''}`}
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(itemType, itemId, itemTitle); }}
+      className={`btn-ghost hover:scale-105 active:scale-95 transition-transform ${saved ? 'text-emerald-600 dark:text-emerald-400' : ''}`}
       aria-label={saved ? 'Unsave' : 'Save'}
     >
-      {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+      {saved ? <BookmarkCheck className="w-4 h-4 text-[#138808]" /> : <Bookmark className="w-4 h-4" />}
       <span>{saved ? 'Saved' : 'Save'}</span>
     </button>
   );
@@ -31,7 +32,9 @@ export function SaveButton({ itemType, itemId, itemTitle }: SaveButtonProps) {
 
 export function ShareButton({ title }: { title: string }) {
   const [copied, setCopied] = useState(false);
-  const handleShare = async () => {
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const url = window.location.href;
     if (navigator.share) {
       try {
@@ -46,7 +49,7 @@ export function ShareButton({ title }: { title: string }) {
     }
   };
   return (
-    <button onClick={handleShare} className="btn-ghost" aria-label="Share">
+    <button onClick={handleShare} className="btn-ghost hover:scale-105 active:scale-95 transition-transform" aria-label="Share">
       <Share2 className="w-4 h-4" />
       <span>{copied ? 'Copied!' : 'Share'}</span>
     </button>
@@ -55,7 +58,7 @@ export function ShareButton({ title }: { title: string }) {
 
 export function PrintButton() {
   return (
-    <button onClick={() => window.print()} className="btn-ghost" aria-label="Print">
+    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.print(); }} className="btn-ghost hover:scale-105 active:scale-95 transition-transform" aria-label="Print">
       <Printer className="w-4 h-4" />
       <span>Print</span>
     </button>
@@ -64,7 +67,7 @@ export function PrintButton() {
 
 export function DownloadButton({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="btn-ghost" aria-label="Download">
+    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }} className="btn-ghost hover:scale-105 active:scale-95 transition-transform" aria-label="Download">
       <Download className="w-4 h-4" />
       <span>Download</span>
     </button>
@@ -94,6 +97,93 @@ function getStatusBadge(openDate?: string | null, closeDate?: string | null, sta
   return <span className="badge badge-emerald">Open</span>;
 }
 
+export function SchemeCategoryIllustration({ category, size = 'large' }: { category: string; size?: 'small' | 'large' }) {
+  const isLarge = size === 'large';
+  const sizeClasses = isLarge ? 'w-full h-32' : 'w-16 h-16 rounded-2xl';
+
+  switch (category) {
+    case 'agriculture':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-amber-500/10 via-[#138808]/5 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#138808]" : "w-10 h-10 text-[#138808]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#138808" fillOpacity="0.08" />
+            <path d="M50 75 V40" stroke="#138808" strokeWidth="4.5" strokeLinecap="round" />
+            <path d="M50 40 C57 32, 67 32, 72 40 C67 45, 57 45, 50 40 Z" fill="#138808" fillOpacity="0.85" />
+            <path d="M50 50 C43 42, 33 42, 28 50 C33 55, 43 55, 50 50 Z" fill="#FF9933" fillOpacity="0.85" />
+            <path d="M25 75 H75" stroke="#0B1F3A" strokeWidth="4.5" strokeLinecap="round" />
+          </svg>
+        </div>
+      );
+    case 'education':
+    case 'youth':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-blue-500/10 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#0B1F3A]" : "w-10 h-10 text-[#0B1F3A]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#2563EB" fillOpacity="0.08" />
+            <path d="M50 22 L82 38 L50 54 L18 38 Z" fill="#0B1F3A" />
+            <path d="M32 45 V64 C32 69, 68 69, 68 64 V45" stroke="#0B1F3A" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M82 38 V62" stroke="#FF9933" strokeWidth="3" strokeLinecap="round" />
+            <circle cx="82" cy="62" r="3.5" fill="#FF9933" />
+          </svg>
+        </div>
+      );
+    case 'health':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-red-500/10 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#DC2626]" : "w-10 h-10 text-[#DC2626]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#DC2626" fillOpacity="0.08" />
+            <path d="M50 20 C60 10, 85 15, 80 40 C75 60, 50 80, 50 80 C50 80, 25 60, 20 40 C15 15, 40 10, 50 20 Z" fill="#DC2626" fillOpacity="0.8" />
+            <path d="M50 34 V52 M41 43 H59" stroke="#FFFFFF" strokeWidth="6.5" strokeLinecap="round" />
+          </svg>
+        </div>
+      );
+    case 'housing':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-emerald-500/10 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#138808]" : "w-10 h-10 text-[#138808]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#138808" fillOpacity="0.08" />
+            <path d="M18 48 L50 22 L82 48" stroke="#0B1F3A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M28 44 V76 H72 V44" stroke="#0B1F3A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            <rect x="44" y="56" width="12" height="20" fill="#FF9933" rx="1" />
+          </svg>
+        </div>
+      );
+    case 'business':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-purple-500/10 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#7C3AED]" : "w-10 h-10 text-[#7C3AED]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#7C3AED" fillOpacity="0.08" />
+            <rect x="22" y="32" width="56" height="38" rx="6" stroke="#0B1F3A" strokeWidth="5.5" />
+            <path d="M38 32 V25 C38 22, 62 22, 62 25 V32" stroke="#0B1F3A" strokeWidth="4.5" strokeLinecap="round" />
+            <circle cx="50" cy="51" r="5" fill="#FF9933" />
+          </svg>
+        </div>
+      );
+    case 'pensions':
+    case 'women-child':
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-pink-500/10 to-transparent flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#E1306C]" : "w-10 h-10 text-[#E1306C]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="32" fill="#E1306C" fillOpacity="0.08" />
+            <path d="M50 25 C50 25, 75 40, 75 55 C75 70, 50 80, 50 80 C50 80, 25 70, 25 55 C25 40, 50 25, 50 25 Z" fill="#0B1F3A" fillOpacity="0.8" />
+            <path d="M38 48 C43 44, 57 44, 62 48" stroke="#FF9933" strokeWidth="4" strokeLinecap="round" />
+            <path d="M40 58 H60" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" />
+          </svg>
+        </div>
+      );
+    default:
+      return (
+        <div className={`${sizeClasses} bg-gradient-to-br from-[#FF9933]/15 to-[#138808]/15 flex items-center justify-center overflow-hidden relative flex-shrink-0`}>
+          <svg className={isLarge ? "w-16 h-16 text-[#0B1F3A]" : "w-10 h-10 text-[#0B1F3A]"} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 45 Q 35 30, 50 50 T 85 55" stroke="#FF9933" strokeWidth="4.5" strokeLinecap="round" />
+            <path d="M15 52 Q 35 37, 50 57 T 85 62" stroke="#0B1F3A" strokeWidth="4.5" strokeLinecap="round" />
+            <path d="M15 59 Q 35 44, 50 64 T 85 69" stroke="#138808" strokeWidth="4.5" strokeLinecap="round" />
+          </svg>
+        </div>
+      );
+  }
+}
+
 interface SchemeCardProps {
   title: string;
   slug: string;
@@ -117,55 +207,94 @@ interface SchemeCardProps {
 
 export function SchemeCard({ title, slug, description, level, state, benefits, trending, tags, score, reasons, compact, requiredDocuments, officialWebsite, openDate, closeDate, status, lastVerifiedAt, layoutMode = 'grid' }: SchemeCardProps) {
   const isList = layoutMode === 'list';
+  
+  // Dynamic category resolving
+  const schemeData = MOCK_SCHEMES.find(s => s.slug === slug);
+  const categoryId = schemeData?.category_id;
+  const categoryName = MOCK_CATEGORIES.find(c => c.id === categoryId)?.slug || '';
+
   return (
-    <Link to={`/schemes/${slug}`} className="block group w-full">
-      <div className={`glass-card h-full flex ${isList ? 'flex-col sm:flex-row sm:items-center justify-between gap-4 p-5' : 'flex-col'}`}>
-        <div className={`flex-1 ${isList ? 'min-w-0' : ''}`}>
-          <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className={level === 'central' ? 'badge-emerald' : 'badge-gold'}>
-                {level === 'central' ? 'Central' : state || 'State'}
-              </span>
-              {trending && <span className="badge-gold">Trending</span>}
-              {getStatusBadge(openDate, closeDate, status)}
-            </div>
-            <div className="flex items-center gap-1">
-              {lastVerifiedAt && (
-                <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
-                  <BadgeCheck className="w-3 h-3" /> Verified
-                </span>
+    <Link to={`/schemes/${slug}`} className="block group w-full hover-lift transition-all">
+      <div className={`glass-card h-full flex overflow-hidden hover:border-[#FF9933]/50 transition-colors shadow-sm hover:shadow-md ${isList ? 'flex-col sm:flex-row sm:items-center justify-between gap-4 p-5' : 'flex-col !p-0'}`}>
+        
+        {/* Render large illustration at top of Grid Cards */}
+        {!isList && (
+          <div className="relative w-full border-b border-charcoal-200/50 dark:border-charcoal-800/50 overflow-hidden">
+            <SchemeCategoryIllustration category={categoryName} size="large" />
+            {trending && <span className="absolute top-3 left-3 badge-gold z-10 animate-pulse-soft">Trending</span>}
+            <span className={`absolute top-3 right-3 z-10 ${level === 'central' ? 'badge-emerald' : 'badge-gold'}`}>
+              {level === 'central' ? 'Central' : state || 'State'}
+            </span>
+          </div>
+        )}
+
+        <div className={`flex-1 ${isList ? 'min-w-0' : 'p-5 flex flex-col h-full'}`}>
+          
+          {/* Horizontal layout has graphic avatar on the left */}
+          <div className="flex gap-4 items-start">
+            {isList && (
+              <div className="flex-shrink-0 shadow-sm border border-charcoal-200/20 dark:border-charcoal-800/20 rounded-2xl overflow-hidden">
+                <SchemeCategoryIllustration category={categoryName} size="small" />
+              </div>
+            )}
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
+                {isList && (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className={level === 'central' ? 'badge-emerald' : 'badge-gold'}>
+                      {level === 'central' ? 'Central' : state || 'State'}
+                    </span>
+                    {trending && <span className="badge-gold">Trending</span>}
+                    {getStatusBadge(openDate, closeDate, status)}
+                  </div>
+                )}
+                {!isList && getStatusBadge(openDate, closeDate, status)}
+                
+                <div className="flex items-center gap-1">
+                  {lastVerifiedAt && (
+                    <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
+                      <BadgeCheck className="w-3 h-3 text-[#138808]" /> Verified
+                    </span>
+                  )}
+                  {score !== undefined && (
+                    <span className={`badge ${score >= 75 ? 'badge-emerald' : score >= 50 ? 'badge-gold' : 'badge-charcoal'}`}>
+                      {score}% match
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <h3 className="font-display font-bold text-sm lg:text-base text-charcoal-900 dark:text-white group-hover:text-[#FF9933] transition-colors mb-1.5 line-clamp-2">
+                {title}
+              </h3>
+              
+              {!compact && <p className="text-xs lg:text-sm text-charcoal-600 dark:text-[#CBD5E1] line-clamp-2 mb-3 leading-relaxed">{description}</p>}
+              
+              {benefits && (
+                <p className="text-xs lg:text-sm text-charcoal-700 dark:text-charcoal-300 line-clamp-2 mb-3">
+                  <span className="font-semibold text-charcoal-900 dark:text-white">Benefits:</span> {benefits}
+                </p>
               )}
-              {score !== undefined && (
-                <span className={`badge ${score >= 75 ? 'badge-emerald' : score >= 50 ? 'badge-gold' : 'badge-charcoal'}`}>
-                  {score}% match
-                </span>
+              
+              {reasons && reasons.length > 0 && (
+                <ul className="text-xs text-charcoal-500 dark:text-charcoal-400 space-y-0.5 mb-3">
+                  {reasons.slice(0, 2).map((r, i) => (
+                    <li key={i} className="flex items-start gap-1">
+                      <span className="text-emerald-500 mt-0.5">•</span>
+                      <span className="line-clamp-1">{r}</span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           </div>
-          <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
-            {title}
-          </h3>
-          {!compact && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mb-3">{description}</p>}
-          {benefits && (
-            <p className="text-sm text-charcoal-600 dark:text-charcoal-300 line-clamp-2 mb-3">
-              <span className="font-semibold">Benefits:</span> {benefits}
-            </p>
-          )}
-          {reasons && reasons.length > 0 && (
-            <ul className="text-xs text-charcoal-500 dark:text-charcoal-400 space-y-0.5 mb-3">
-              {reasons.slice(0, 2).map((r, i) => (
-                <li key={i} className="flex items-start gap-1">
-                  <span className="text-emerald-500 mt-0.5">•</span>
-                  <span className="line-clamp-1">{r}</span>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
         
-        <div className={`flex flex-col gap-3 justify-end items-end ${isList ? 'sm:border-l sm:border-charcoal-200 dark:sm:border-charcoal-800 sm:pl-4 flex-shrink-0' : 'mt-auto pt-2'}`}>
+        {/* Actions panel */}
+        <div className={`flex flex-col gap-3 justify-end items-end ${isList ? 'sm:border-l sm:border-charcoal-200 dark:sm:border-charcoal-800 sm:pl-4 flex-shrink-0' : 'p-5 pt-0 mt-auto border-t border-charcoal-100 dark:border-charcoal-800/60 pt-3'}`}>
           {requiredDocuments && requiredDocuments.length > 0 && !compact && (
-            <div className={`${isList ? 'text-right hidden sm:block' : 'mb-3'}`}>
+            <div className={`${isList ? 'text-right hidden sm:block' : 'hidden'}`}>
               <p className="text-xs font-medium text-charcoal-600 dark:text-charcoal-300 mb-1 flex items-center gap-1 justify-end">
                 <FileText className="w-3 h-3" /> Documents
               </p>
@@ -180,17 +309,16 @@ export function SchemeCard({ title, slug, description, level, state, benefits, t
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {tags.slice(0, 2).map((tag) => (
-                  <span key={tag} className="badge-charcoal">{tag}</span>
+                  <span key={tag} className="badge-charcoal text-[9px]">{tag}</span>
                 ))}
               </div>
             )}
-            {officialWebsite && (
-              <span className="flex items-center gap-0.5 text-xs text-emerald-600 dark:text-emerald-400 ml-auto">
-                <ExternalLink className="w-3 h-3" /> Apply
-              </span>
-            )}
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#FF9933] group-hover:translate-x-0.5 transition-transform ml-auto">
+              Details <ArrowRight className="w-3.5 h-3.5" />
+            </span>
           </div>
         </div>
+
       </div>
     </Link>
   );
@@ -210,8 +338,8 @@ export function ScholarshipCard({ title, slug, provider, level, state, amount, d
   lastVerifiedAt?: string | null;
 }) {
   return (
-    <Link to={`/scholarships/${slug}`} className="block group">
-      <div className="glass-card h-full flex flex-col">
+    <Link to={`/scholarships/${slug}`} className="block group hover-lift transition-all">
+      <div className="glass-card h-full flex flex-col hover:border-[#FF9933]/50 transition-colors shadow-sm">
         <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className={level === 'central' ? 'badge-emerald' : level === 'state' ? 'badge-gold' : 'badge-charcoal'}>
@@ -222,15 +350,15 @@ export function ScholarshipCard({ title, slug, provider, level, state, amount, d
           </div>
           {lastVerifiedAt && (
             <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
-              <BadgeCheck className="w-3 h-3" /> Verified
+              <BadgeCheck className="w-3 h-3 text-[#138808]" /> Verified
             </span>
           )}
         </div>
-        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
+        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-[#FF9933] transition-colors mb-1.5 line-clamp-2">
           {title}
         </h3>
         {provider && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 mb-2">By {provider}</p>}
-        <div className="mt-auto space-y-1">
+        <div className="mt-auto space-y-1 pt-3 border-t border-charcoal-100 dark:border-charcoal-800/60">
           {amount && (
             <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{amount}</p>
           )}
@@ -253,8 +381,8 @@ export function ServiceCard({ title, slug, category, description, lastVerifiedAt
   lastVerifiedAt?: string | null;
 }) {
   return (
-    <Link to={`/services/${slug}`} className="block group">
-      <div className="glass-card h-full flex flex-col">
+    <Link to={`/services/${slug}`} className="block group hover-lift transition-all">
+      <div className="glass-card h-full flex flex-col hover:border-[#FF9933]/50 transition-colors shadow-sm">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-1.5">
             {category && <span className="badge-emerald self-start">{category}</span>}
@@ -264,14 +392,14 @@ export function ServiceCard({ title, slug, category, description, lastVerifiedAt
           </div>
           {lastVerifiedAt && (
             <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400" title={`Verified: ${new Date(lastVerifiedAt).toLocaleDateString()}`}>
-              <BadgeCheck className="w-3 h-3" /> Verified
+              <BadgeCheck className="w-3 h-3 text-[#138808]" /> Verified
             </span>
           )}
         </div>
-        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
+        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-[#FF9933] transition-colors mb-1.5 line-clamp-2">
           {title}
         </h3>
-        {description && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mt-auto">{description}</p>}
+        {description && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-2 mt-auto pt-3 border-t border-charcoal-100 dark:border-charcoal-800/60">{description}</p>}
       </div>
     </Link>
   );
@@ -285,8 +413,8 @@ export function PolicyCard({ title, slug, category, summary, lastVerifiedAt }: {
   lastVerifiedAt?: string | null;
 }) {
   return (
-    <Link to={`/policies/${slug}`} className="block group">
-      <div className="glass-card h-full flex flex-col">
+    <Link to={`/policies/${slug}`} className="block group hover-lift transition-all">
+      <div className="glass-card h-full flex flex-col hover:border-[#FF9933]/50 transition-colors shadow-sm">
         <div className="flex items-start justify-between gap-2 mb-2">
           {category && <span className="badge-gold self-start">{category}</span>}
           {lastVerifiedAt && (
@@ -295,10 +423,10 @@ export function PolicyCard({ title, slug, category, summary, lastVerifiedAt }: {
             </span>
           )}
         </div>
-        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1.5 line-clamp-2">
+        <h3 className="font-display font-bold text-base text-charcoal-900 dark:text-white group-hover:text-[#FF9933] transition-colors mb-1.5 line-clamp-2">
           {title}
         </h3>
-        {summary && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-3 mt-auto">{summary}</p>}
+        {summary && <p className="text-sm text-charcoal-500 dark:text-charcoal-400 line-clamp-3 mt-auto pt-3 border-t border-charcoal-100 dark:border-charcoal-800/60">{summary}</p>}
       </div>
     </Link>
   );

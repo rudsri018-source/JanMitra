@@ -8,6 +8,7 @@ import {
   Sparkles, Search, ListChecks, Award, FileText, BookOpen, FileCheck,
   Scale, ClipboardList, Bell, Shield, Menu, X, Moon, Sun, Globe,
   Accessibility, Contrast, Type, User, LogOut, ChevronDown, Settings as SettingsIcon, LayoutDashboard,
+  Facebook, Twitter, Instagram, Linkedin, Youtube, Send, Mail, Phone, ExternalLink
 } from 'lucide-react';
 
 const HEADER_NAV_ITEMS = [
@@ -49,7 +50,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
   return (
     <div className="min-h-screen flex flex-col bg-charcoal-50 dark:bg-charcoal-950">
       {/* Tricolor Accent Bar */}
-      <div className="h-1.5 w-full flex sticky top-0 z-50">
+      <div className="h-1.5 w-full flex sticky top-0 z-50 animate-pulse-soft">
         <div className="flex-1 bg-[#FF9933]"></div>
         <div className="flex-1 bg-[#FFFFFF]"></div>
         <div className="flex-1 bg-[#138808]"></div>
@@ -64,8 +65,8 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden btn-ghost p-1.5 -ml-2 mr-1">
               <Menu className="w-6 h-6 text-charcoal-800 dark:text-white" />
             </button>
-            <Link to="/dashboard" className="flex items-center gap-3">
-              <div className="flex-shrink-0">
+            <Link to="/dashboard" className="flex items-center gap-3 group transition-transform hover:scale-[1.01]">
+              <div className="flex-shrink-0 group-hover:rotate-3 transition-transform">
                 <JanMitraLogo />
               </div>
               <div>
@@ -85,7 +86,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
               <Link
                 key={item.to}
                 to={item.to}
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all ${
+                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all hover:scale-105 active:scale-95 ${
                   isActive(item.to)
                     ? 'bg-[#0B1F3A] text-white dark:bg-[#FDBA74] dark:text-[#07111F] shadow-sm'
                     : 'text-charcoal-700 dark:text-[#CBD5E1] hover:bg-charcoal-100 dark:hover:bg-charcoal-800/60'
@@ -102,7 +103,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             <div className="relative">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="btn-ghost p-2 flex items-center gap-1 text-charcoal-700 dark:text-[#CBD5E1] font-semibold"
+                className="btn-ghost p-2 flex items-center gap-1 text-charcoal-700 dark:text-[#CBD5E1] font-semibold hover:scale-105"
                 aria-label="Language Selector"
               >
                 <Globe className="w-4 h-4" />
@@ -133,14 +134,14 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1]"
+              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1] hover:scale-110 active:scale-90 transition-transform"
               aria-label="Toggle Theme"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-[#FDBA74]" /> : <Moon className="w-4 h-4" />}
             </button>
 
             {/* Notifications */}
-            <Link to="/notifications" className="btn-ghost p-2 relative text-charcoal-700 dark:text-[#CBD5E1]">
+            <Link to="/notifications" className="btn-ghost p-2 relative text-charcoal-700 dark:text-[#CBD5E1] hover:scale-110 transition-transform">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF9933] rounded-full" />
             </Link>
@@ -148,7 +149,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             {/* Accessibility Settings Toggle */}
             <button
               onClick={() => setSettingsOpen(!settingsOpen)}
-              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1]"
+              className="btn-ghost p-2 text-charcoal-700 dark:text-[#CBD5E1] hover:scale-110 transition-transform"
               aria-label="Accessibility Settings"
             >
               <Accessibility className="w-4 h-4" />
@@ -158,7 +159,7 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-1.5 btn-ghost p-1"
+                className="flex items-center gap-1.5 btn-ghost p-1 hover:scale-105 transition-transform"
               >
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#0B1F3A] to-[#FF9933] flex items-center justify-center text-white text-xs font-bold shadow-sm">
                   {profile?.full_name?.[0]?.toUpperCase() || (isGuest ? 'G' : 'U')}
@@ -282,14 +283,110 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-charcoal-200/50 dark:border-charcoal-800/50 px-4 lg:px-8 py-8 text-center text-xs text-charcoal-600 dark:text-[#CBD5E1]">
-        <div className="h-1.5 w-24 flex gap-1 mx-auto mb-4">
+      {/* Rich Multi-column Footer */}
+      <footer className="bg-white dark:bg-[#0F172A] border-t border-charcoal-200/50 dark:border-charcoal-800/50 px-4 lg:px-8 pt-12 pb-8 mt-auto text-charcoal-600 dark:text-[#CBD5E1]">
+        
+        {/* Tricolor decorative accent slide line at top of footer */}
+        <div className="h-1 w-full flex mb-10 rounded-full overflow-hidden opacity-85">
           <div className="flex-1 bg-[#FF9933]"></div>
-          <div className="flex-1 bg-charcoal-300"></div>
+          <div className="flex-1 bg-[#FFFFFF]"></div>
           <div className="flex-1 bg-[#138808]"></div>
         </div>
-        <p className="font-semibold">&copy; {new Date().getFullYear()} JanMitra. {t('poweredBy')}.</p>
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
+          {/* Col 1: About & Socials */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <JanMitraLogo />
+              <span className="font-display font-extrabold text-base text-charcoal-900 dark:text-white">JanMitra</span>
+            </div>
+            <p className="text-xs leading-relaxed text-charcoal-500 dark:text-[#CBD5E1]">
+              India's secure AI-driven welfare search engine, helping citizens find, match, and apply for central and state benefits easily.
+            </p>
+            <div className="flex items-center gap-3">
+              <a href="#" className="w-8 h-8 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 hover:bg-[#FF9933] hover:text-white flex items-center justify-center transition-all hover:scale-110" aria-label="Facebook">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 hover:bg-[#0B1F3A] hover:text-white flex items-center justify-center transition-all hover:scale-110" aria-label="Twitter">
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 hover:bg-[#E1306C] hover:text-white flex items-center justify-center transition-all hover:scale-110" aria-label="Instagram">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 hover:bg-[#0077B5] hover:text-white flex items-center justify-center transition-all hover:scale-110" aria-label="LinkedIn">
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 rounded-xl bg-charcoal-100 dark:bg-charcoal-800 hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all hover:scale-110" aria-label="YouTube">
+                <Youtube className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Col 2: Categories */}
+          <div className="space-y-3">
+            <h4 className="font-display font-bold text-xs uppercase tracking-wider text-charcoal-900 dark:text-white border-b border-charcoal-100 dark:border-charcoal-800 pb-1.5">Categories</h4>
+            <ul className="space-y-2 text-xs">
+              <li><Link to="/schemes?category=education" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Education & Scholarships</Link></li>
+              <li><Link to="/schemes?category=agriculture" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Agriculture & Farming</Link></li>
+              <li><Link to="/schemes?category=health" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Health & Family Welfare</Link></li>
+              <li><Link to="/schemes?category=housing" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Housing & Urban</Link></li>
+              <li><Link to="/schemes?category=banking" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Finance & Banking</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 3: Quick Navigation */}
+          <div className="space-y-3">
+            <h4 className="font-display font-bold text-xs uppercase tracking-wider text-charcoal-900 dark:text-white border-b border-charcoal-100 dark:border-charcoal-800 pb-1.5">Navigation</h4>
+            <ul className="space-y-2 text-xs">
+              <li><Link to="/dashboard" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Home</Link></li>
+              <li><Link to="/schemes" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Schemes Directory</Link></li>
+              <li><Link to="/services" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Citizen Services</Link></li>
+              <li><Link to="/states" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">States Welfare</Link></li>
+              <li><Link to="/eligibility" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">Eligibility Checker</Link></li>
+              <li><Link to="/about" className="hover:text-[#FF9933] transition-all hover:translate-x-1 inline-block">About Portal</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 4: Official Portals */}
+          <div className="space-y-3">
+            <h4 className="font-display font-bold text-xs uppercase tracking-wider text-charcoal-900 dark:text-white border-b border-charcoal-100 dark:border-charcoal-800 pb-1.5">External Links</h4>
+            <ul className="space-y-2 text-xs">
+              <li><a href="https://india.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF9933] transition-all inline-flex items-center gap-1">National Portal of India <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://myscheme.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF9933] transition-all inline-flex items-center gap-1">myScheme Portal <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://digitalindia.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF9933] transition-all inline-flex items-center gap-1">Digital India Portal <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://www.nvsp.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF9933] transition-all inline-flex items-center gap-1">Voter Services Portal <ExternalLink className="w-3 h-3" /></a></li>
+            </ul>
+          </div>
+
+          {/* Col 5: Newsletter & Contact */}
+          <div className="space-y-3">
+            <h4 className="font-display font-bold text-xs uppercase tracking-wider text-charcoal-900 dark:text-white border-b border-charcoal-100 dark:border-charcoal-800 pb-1.5">Stay Informed</h4>
+            <p className="text-[11px] text-charcoal-500 dark:text-[#CBD5E1]">Subscribe to receive notifications when new schemes are launched.</p>
+            <form onSubmit={(e) => { e.preventDefault(); alert("Subscribed successfully!"); }} className="flex gap-1.5">
+              <input type="email" placeholder="Your Email" className="input py-2 text-xs" required />
+              <button type="submit" className="p-2.5 rounded-xl bg-[#0B1F3A] hover:bg-[#0B1F3A]/90 dark:bg-[#FDBA74] dark:text-[#07111F] text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95" aria-label="Subscribe">
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </form>
+            <div className="pt-2 text-[10px] space-y-1 text-charcoal-400 dark:text-charcoal-500">
+              <p className="flex items-center gap-1"><Phone className="w-3 h-3 text-[#138808]" /> 1800-111-XXXX (Toll-Free)</p>
+              <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-[#FF9933]" /> support@janmitra.gov.in</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bottom Bar */}
+        <div className="border-t border-charcoal-200/50 dark:border-charcoal-800/50 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-2xs md:text-xs">
+          <p className="font-semibold text-charcoal-500 dark:text-[#CBD5E1]">
+            &copy; {new Date().getFullYear()} JanMitra. All Rights Reserved. {t('poweredBy')}.
+          </p>
+          <div className="flex flex-wrap gap-4 text-charcoal-500 dark:text-charcoal-400 font-medium">
+            <Link to="/about" className="hover:text-[#FF9933]">Disclaimer</Link>
+            <a href="#" className="hover:text-[#FF9933]">Privacy Policy</a>
+            <a href="#" className="hover:text-[#FF9933]">Terms of Service</a>
+            <a href="#" className="hover:text-[#FF9933]">Accessibility Statement</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
