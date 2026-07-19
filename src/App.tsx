@@ -23,6 +23,7 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SearchPage } from './pages/SearchPage';
 import { AdminPage } from './pages/AdminPage';
+import { isSupabaseConfigured } from './lib/supabase';
 
 function AppContent() {
   const { loading, user, isGuest } = useAuth();
@@ -135,6 +136,39 @@ function AppContent() {
 }
 
 function App() {
+  if (!isSupabaseConfigured) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-charcoal-900 text-white p-6 font-sans">
+        <div className="max-w-md w-full bg-charcoal-800 rounded-3xl p-8 border border-charcoal-700/50 shadow-2xl space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="font-extrabold text-xl">Setup Required</h1>
+              <p className="text-xs text-charcoal-400">JanMitra Environment Configuration</p>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-sm text-charcoal-300">
+            <p>
+              JanMitra is running, but it cannot connect to the database because the environment variables are not configured.
+            </p>
+            <div className="bg-charcoal-950 p-4 rounded-xl font-mono text-xs text-orange-400 border border-charcoal-800 space-y-1">
+              <div>• VITE_SUPABASE_URL is missing</div>
+              <div>• VITE_SUPABASE_ANON_KEY is missing</div>
+            </div>
+            <p className="text-xs text-charcoal-400">
+              If deploying on Render, please go to your service dashboard, open the <strong>Environment</strong> tab, and add these keys with their correct values, then save.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <SettingsProvider>
       <AuthProvider>
