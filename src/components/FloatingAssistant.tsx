@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSchemes } from '../hooks/useData';
 import { useTranslation } from '../i18n/useTranslation';
-import { generateResponse, type ChatMessage } from '../lib/ai';
+import { generateResponse, queryRagEndpoint, type ChatMessage } from '../lib/ai';
 import { Sparkles, X, Send, Bot } from 'lucide-react';
 import { Link } from '../router/Router';
 
@@ -13,15 +13,26 @@ export function FloatingAssistant() {
     { role: 'assistant', content: "Hi! I'm your AI Government Assistant. Ask me about schemes, scholarships, or services.", suggestions: ['Find schemes for me', 'Scholarships', 'How to get Aadhaar?'] },
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSend = (text: string) => {
-    if (!text.trim()) return;
+  const handleSend = async (text: string) => {
+    if (!text.trim() || loading) return;
     setMessages((prev) => [...prev, { role: 'user', content: text }]);
     setInput('');
-    setTimeout(() => {
+    setLoading(true);
+    try {
+      const history = messages
+        .filter((m) => m.role === 'user' || m.role === 'assistant')
+        .slice(-4)
+        .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+      const rag = await queryRagEndpoint(text, {}, history);
+      const response = generateResponse(text, schemes, {}, null, rag.results, rag.response);
+      setMessages((prev) => [...prev, response]);
+    } catch {
       const response = generateResponse(text, schemes, {}, null);
       setMessages((prev) => [...prev, response]);
-    }, 500);
+    }
+    setLoading(false);
   };
 
   return (
@@ -58,6 +69,14 @@ export function FloatingAssistant() {
                 </div>
               </div>
             ))}
+            {loading && (
+              <div className="flex gap-2">
+                <Bot className="w-6 h-6 text-emerald-500 flex-shrink-0" />
+                <div className="bg-charcoal-100 dark:bg-charcoal-800 rounded-xl p-2.5 text-xs text-charcoal-500">
+                  <span className="animate-pulse">Typing...</span>
+                </div>
+              </div>
+            )}
           </div>
           {messages.length > 0 && messages[messages.length - 1].suggestions && (
             <div className="px-4 pb-2 flex flex-wrap gap-1">

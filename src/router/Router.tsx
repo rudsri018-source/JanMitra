@@ -7,21 +7,27 @@ type RouterContextValue = {
 
 const RouterContext = createContext<RouterContextValue | undefined>(undefined);
 
-function getHashPath(): string {
+function getPath(): string {
   const hash = window.location.hash.replace(/^#/, '');
-  return hash || '/';
+  if (hash) return hash;
+  const path = window.location.pathname;
+  return path || '/';
 }
 
 export function RouterProvider({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState<string>(getHashPath());
+  const [path, setPath] = useState<string>(getPath());
 
   useEffect(() => {
-    const onHashChange = () => {
-      setPath(getHashPath());
+    const onLocationChange = () => {
+      setPath(getPath());
       window.scrollTo(0, 0);
     };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+    window.addEventListener('hashchange', onLocationChange);
+    window.addEventListener('popstate', onLocationChange);
+    return () => {
+      window.removeEventListener('hashchange', onLocationChange);
+      window.removeEventListener('popstate', onLocationChange);
+    };
   }, []);
 
   const navigate = (to: string) => {

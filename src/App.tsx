@@ -63,7 +63,7 @@ function AppContent() {
   } else if (cleanPath === '/dashboard') {
     page = <DashboardPage />;
     activePath = '/dashboard';
-  } else if (cleanPath === '/assistant') {
+  } else if (cleanPath === '/assistant' || cleanPath === '/ai-assistant') {
     page = <AssistantPage />;
     activePath = '/assistant';
   } else if (cleanPath === '/eligibility') {
